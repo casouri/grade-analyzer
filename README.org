@@ -1,0 +1,8 @@
+#+TITLE: Grade analyzer
+
+Be aware, this project will not be maintained!!!
+
+
+- Outline :: [[https://docs.google.com/document/d/1biS9DbUGVLr7K036jbEEMxUdEAtjVgsL0zE6JgopJR8/edit?usp=sharing]]
+
+
