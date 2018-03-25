@@ -5,5 +5,7 @@ Be aware, this project will not be maintained!!!
 
 - Outline :: [[https://docs.google.com/document/d/1biS9DbUGVLr7K036jbEEMxUdEAtjVgsL0zE6JgopJR8/edit?usp=sharing]]
              
+*Update:* Now it's moved to [[./outline.org][./outline.org]]. Any change will be updated there.
+             
 
 
