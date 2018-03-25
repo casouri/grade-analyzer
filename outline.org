@@ -18,7 +18,7 @@ It communicates with backend server written in Python to analyze the gradebook. 
 
 *** Why separate the program into a frontend and a backend?
 1. Because This is a school project which requires Python
-2. (minor) I don’t like javascript very much
+2. (minor) I don't like javascript very much
 
 *** What does the client do and what does the server do?
 Client handles all the human interface and manipulates the form (gradebook). The server analyzes forms sent by client.
@@ -28,7 +28,6 @@ Client handles all the human interface and manipulates the form (gradebook). The
   - Vue.js
 - Python
   - requests
-
 
 ** functionality
 - What grade do I need for certain expected final grade.
@@ -67,17 +66,17 @@ Please follow the format below:
 
 #+BEGIN_SRC python
 def some_function(arg1, arg2):
-    ”””One line description of the function.
-* Arguments:
-  * arg1 (type): description of the argument
-  * arg2 (type): description of the argument
+    """One line description of the function.
+- Arguments:
+  - arg1 (type): description of the argument
+  - arg2 (type): description of the argument
 
-* Return:
-  * type: description of the return value
-  * type: description of the return value
+- Return:
+  - type: description of the return value
+  - type: description of the return value
 
 (Other detailed descriptions)
-”””
+"""
 #+END_SRC
 
 ** Data structure
@@ -89,56 +88,61 @@ Beside quiz and assignment, a form also need grading_standard and assignment_gro
 
 An example form (not all required elements included):
 {
-  ‘quiz’: [
-            {‘name’: ‘quiz 1’, ‘grade’: ‘A’, ‘display grade’: ‘A’}, 
-            {‘name’: ‘quiz 1’, ‘grade’: ‘98’, ‘display grade’: ‘78’}, 
-            {‘name’: ‘quiz 1’, ‘grade’: ‘80’, ‘display grade’: ‘78’}, 
-            {‘name’: ‘quiz 1’, ‘grade’: ‘95’, ‘display grade’: ‘78’}
+  'quiz': [
+            {'name': 'quiz 1', 'grade': 'A', 'display grade': 'A'}, 
+            {'name': 'quiz 1', 'grade': '98', 'display grade': '78'}, 
+            {'name': 'quiz 1', 'grade': '80', 'display grade': '78'}, 
+            {'name': 'quiz 1', 'grade': '95', 'display grade': '78'}
           ],
-  ‘assignment’: [
-                  { ‘name’: ‘hw 1’, 
-                    ‘grade’: ‘92’, 
-                    ‘display_grade’: ‘78’, 
-                    ‘assignment_group_id’: 1 }, 
-                  { ‘name’: ‘hw 2’, 
-                    ‘grade’: ‘79’, 
-                    ‘display_grade’: ‘78’, 
-                    ‘assignment_group_id’: 1 }, 
-                  { ‘name’: ‘test1’, 
-                    ‘grade’: ‘88’, 
-                    ‘display_grade’: ‘78’, 
-                    ‘assignment_group_id’: 2 }, 
-                  { ‘name’: ‘final’, 
-                    ‘grade’: ‘96’, 
-                    ‘display_grade’: ‘78’, 
-                    ‘assignment_group_id’: 2 },
+  'assignment': [
+                  { 'name': 'hw 1', 
+                    'grade': '92', 
+                    'display_grade': '78', 
+                    'assignment_group_id': 1 }, 
+                  { 'name': 'hw 2', 
+                    'grade': '79', 
+                    'display_grade': '78', 
+                    'assignment_group_id': 1 }, 
+                  { 'name': 'test1', 
+                    'grade': '88', 
+                    'display_grade': '78', 
+                    'assignment_group_id': 2 }, 
+                  { 'name': 'final', 
+                    'grade': '96', 
+                    'display_grade': '78', 
+                    'assignment_group_id': 2 },
                   ],
-‘assignment group’: { ‘name’: ‘homework’,
-                      ‘Id’: 1,
-                      ‘Rule’: {
-                      ‘Drop_lowest’: 1,
+'assignment group': { 'name': 'homework',
+                      'Id': 1,
+                      'Rule': {
+                      'Drop_lowest': 1,
                      } },
-‘Grading_standard’: {},
+'Grading_standard': {},
 }
 
 *** Detailed spec
 - Each element of quiz/assignment have to have following keys:
-  - ‘name’ (str) :: the name of the quiz/assignment
-  - ‘grade’ (str) :: the grade fetched from canvas
-  - ‘display_grade’ (str) :: The grade displayed on the GUI
-  - ‘grading_type’ (str) :: The type of the grade, possible values are 'letter_grade', 'gpa_scale', 'points'.
-  - ‘grading_standard_id’ (int) :: The id of the grading standard being applied to this assignment. Valid if grading_type is 'letter_grade' or 'gpa_scale'.
-  - ‘omit_from_final_grade’ (bool) :: If true, the assignment will be omitted from the student's final grade.
+  - 'name' (str) :: the name of the quiz/assignment
+  - 'grade' (str) :: the grade fetched from canvas
+  - 'display_grade' (str) :: The grade displayed on the GUI
+  - 'grading_type' (str) :: The type of the grade, possible values are 'letter_grade', 'gpa_scale', 'points'.
+  - 'grading_standard_id' (int) :: The id of the grading standard being applied to this assignment. Valid if grading_type is 'letter_grade' or 'gpa_scale'.
+  - 'omit_from_final_grade' (bool) :: If true, the assignment will be omitted from the student's final grade.
 
 - Beside keys above, assignment requires these values:
-  - ‘assignment_group_id’ (int) :: assignment group fetched from canvas
+  - 'assignment_group_id' (int) :: assignment group fetched from canvas
 
 - assignment group:
   Each assignment group is a dict made of these keys:
-  - ‘name’ (str) :: name of the group
-  -  ‘id’ (int) :: the id
-  - ‘rules’ (dict) :: each key is a rule. TODO list all possible rules.
+  - 'name' (str) :: name of the group
+  -  'id' (int) :: the id
+  - 'rules' (dict) :: each key is a rule. TODO list all possible rules.
 
 Notes of canvas API
 https://docs.google.com/document/d/18mY4ZMRscildJ9EnHjZwiuBcDzkvbcuOQummDGHEGOY/edit?usp=sharing
 
+** Spec for each component
+Only public functions
+*** canvas.py
+- get_token() :: get token from canvas api and return it.
+- fetch_grade() :: fetch grade information from 
