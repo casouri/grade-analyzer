@@ -27,6 +27,45 @@ of the student and his/her courses.
     user_id_cache = None
     course_list_cache = None
 
+    @property
+    def course_list(self):
+        """Course list of the user."""
+        if self.course_list_cache:
+            return self.course_list_cache
+        else:
+            course_list = self._get_form(self.url_book['course'])
+            self.course_list_cache = course_list
+            return course_list
+
+    @property
+    def account_list(self):
+        """Get a list of accounts avaliable.
+Doesn't work for now. Not needed anyway."""
+        account_list = self._get_form('/api/v1/accounts')
+        self.account_list = account_list
+        return account_list
+
+    @property
+    def user_profile(self):
+        """Profile of current user."""
+        if self.user_profile_cache:
+            return self.user_profile_cache
+        else:
+            user_profile = self._get_form('/api/v1/users/self/profile')
+            self.user_profile_cache = user_profile
+            self.user_id_cache = user_profile['id']
+            return user_profile
+
+    @property
+    def user_id(self):
+        """ID of current user."""
+        if self.user_id_cache:
+            return self.user_id_cache
+        else:
+            user_id = self.user_profile['id']
+            self.user_id_cache = user_id
+            return user_id
+
     #
     # Public
     #
@@ -77,65 +116,30 @@ Return:
 # """
 #         return self.base_url + url
 
-    def _get_form(self, url):
+    def _get_form(self, url, parameter=None):
         """Get form from Canvas.
 - Argument:
   - url (str): the api url for the requested form.
+  - parameter (dict): a dict of parameters to use in https request.
+    It is passed to requests.get()
         
 - Return:
   - unknow: the form you expect.
 """
 
+        target_url = self.base_url + url
+        logger.debug(target_url)
         response = requests.get(
-            self.base_url + url,
-            headers={'Authorization': 'Bearer ' + self.token})
+            target_url,
+            headers={'Authorization': 'Bearer ' + self.token},
+            params=parameter)
 
-        logger.debug('form in string: ' + str(response.content, 'utf-8'))
+        # logger.debug('form in string: ' + str(response.content, 'utf-8'))
         json_data = json.loads(str(response.content, 'utf-8'))
-        logger.debug(json_data)
+        # logger.debug(json_data)
         return json_data
 
-    @property
-    def course_list(self):
-        """Course list of the user."""
-        if self.course_list_cache:
-            return self.course_list_cache
-        else:
-            course_list = self._get_form(self.url_book['course'])
-            self.course_list_cache = course_list
-            return course_list
-
-    @property
-    def account_list(self):
-        """Get a list of accounts avaliable.
-Doesn't work for now. Not needed anyway."""
-        account_list = self._get_form(self.base_url + '/api/v1/accounts')
-        self.account_list = account_list
-        return account_list
-
-    @property
-    def user_profile(self):
-        """Profile of current user."""
-        if self.user_profile_cache:
-            return self.user_profile_cache
-        else:
-            user_profile = self._get_form(self.base_url +
-                                          '/api/v1/users/self/profile')
-            self.user_profile_cache = user_profile
-            self.user_id = user_profile['id']
-            return user_profile
-
-    @property
-    def user_id(self):
-        """ID of current user."""
-        if self.user_id_cache:
-            return self.user_id_cache
-        else:
-            user_id = self.user_profile['id']
-            self.user_id_cache = user_id
-            return user_id
-
-    def _get_assignment_list(self, course_name):
+    def _get_assignment_list_by_course_name(self, course_name):
         """Get the assignments of a course
 
 - Argument:
@@ -150,6 +154,7 @@ Doesn't work for now. Not needed anyway."""
         else:
             course_list = self._get_form(self.url_book['course'])
 
+        print(course_name)
         course_id = None
         for course in course_list:
             if course['name'] == course_name:
@@ -157,9 +162,11 @@ Doesn't work for now. Not needed anyway."""
                 break
 
         if course_id:
-            assignment_list = self._get_form(self.url_book['course'] + ':' +
-                                             str(course_id) + '/assignments')
-            self.assignment_list = assignment_list
+            assignment_list = self._get_form(
+                self.url_book['course'] +
+                '/api/v1/users/{}/courses/{}/assignments'.format(
+                    self.user_id, course_id),
+                parameter={'include': ['submission']})
             return assignment_list
         else:
             return None
@@ -169,14 +176,15 @@ if __name__ == '__main__':
         '1050~sKxmKbHA0qNQSNqtCPKb87OZEHD6xg7TP574gBnYF6n8nKJ5h6sFQpQMbT4mqKh1',
         'https://canvas.instructure.com')
 
-    # course_list = canvas.course_list
+    course_list = canvas.get_course_list()
     # print(course_list)
 
-    # assignment_list = canvas._get_assignment_list(course_list[2])
-    # print(assignment_list)
+    assignment_list = canvas._get_assignment_list_by_course_name(
+        course_list[2])
+    print(assignment_list)
 
     # account_list = canvas.account_list()
     # print(account_list)
 
-    print(canvas.user_profile)
-    print(canvas.user_id)
+    # print(canvas.user_profile)
+    # print(canvas.user_id)
