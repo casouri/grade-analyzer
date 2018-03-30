@@ -1,0 +1,182 @@
+import json
+
+import requests
+
+import log
+
+'''
+1050~sKxmKbHA0qNQSNqtCPKb87OZEHD6xg7TP574gBnYF6n8nKJ5h6sFQpQMbT4mqKh1
+'''
+
+logger = log.setupLog(__name__, 'debug')
+
+
+class Canvas(object):
+    """Representing Canvas, this class can give you any information
+of the student and his/her courses.
+"""
+
+    #
+    # Property
+    #
+
+    url_book = {'course': '/api/v1/courses'}
+
+    account_list_cache = None
+    user_profile_cache = None
+    user_id_cache = None
+    course_list_cache = None
+
+    #
+    # Public
+    #
+
+    def get_grade_book(self, course):
+        """Get grade book by course name.
+
+- Arguments:
+  - coures (str): the name of the course. Must match exactly.
+        
+- Return:
+  - dict: grade book.
+"""
+
+    def get_course_list(self):
+        """Get a list of courses the user currently in.
+
+Return:
+  - list<str>: a list of course names.
+"""
+        course_string_list = []
+        for course in self.course_list:
+            course_string_list.append(course['name'])
+        return course_string_list
+
+#
+# Private
+#
+
+    def __init__(self, token, base_url):
+        """init
+- Arguments:
+  - token (str): initial token of Canvas API.
+  - base_url (str): The base url of Canvas. *Don't* include
+    slash in the end. It should be https://canvas.instructure.com.
+"""
+        self.token = token
+        self.base_url = base_url.rstrip('/')
+
+#     def _construct_url(self, url):
+#         """Construct url for requests.
+
+# This function adds base url to url.
+
+# - Arguments:
+#   - url (str): the url for the particular service. Starts with '/'.
+#     For example: /api/v1/courses.
+# """
+#         return self.base_url + url
+
+    def _get_form(self, url):
+        """Get form from Canvas.
+- Argument:
+  - url (str): the api url for the requested form.
+        
+- Return:
+  - unknow: the form you expect.
+"""
+
+        response = requests.get(
+            self.base_url + url,
+            headers={'Authorization': 'Bearer ' + self.token})
+
+        logger.debug('form in string: ' + str(response.content, 'utf-8'))
+        json_data = json.loads(str(response.content, 'utf-8'))
+        logger.debug(json_data)
+        return json_data
+
+    @property
+    def course_list(self):
+        """Course list of the user."""
+        if self.course_list_cache:
+            return self.course_list_cache
+        else:
+            course_list = self._get_form(self.url_book['course'])
+            self.course_list_cache = course_list
+            return course_list
+
+    @property
+    def account_list(self):
+        """Get a list of accounts avaliable.
+Doesn't work for now. Not needed anyway."""
+        account_list = self._get_form(self.base_url + '/api/v1/accounts')
+        self.account_list = account_list
+        return account_list
+
+    @property
+    def user_profile(self):
+        """Profile of current user."""
+        if self.user_profile_cache:
+            return self.user_profile_cache
+        else:
+            user_profile = self._get_form(self.base_url +
+                                          '/api/v1/users/self/profile')
+            self.user_profile_cache = user_profile
+            self.user_id = user_profile['id']
+            return user_profile
+
+    @property
+    def user_id(self):
+        """ID of current user."""
+        if self.user_id_cache:
+            return self.user_id_cache
+        else:
+            user_id = self.user_profile['id']
+            self.user_id_cache = user_id
+            return user_id
+
+    def _get_assignment_list(self, course_name):
+        """Get the assignments of a course
+
+- Argument:
+  - course_name (str): the name of the coures.
+
+- Return:
+  - list/None: a list of assignment objects. Detail here: https://canvas.instructure.com/doc/api/assignments.html
+    If nothing matches, return None.
+"""
+        if self.course_list:
+            course_list = self.course_list
+        else:
+            course_list = self._get_form(self.url_book['course'])
+
+        course_id = None
+        for course in course_list:
+            if course['name'] == course_name:
+                course_id = course['id']
+                break
+
+        if course_id:
+            assignment_list = self._get_form(self.url_book['course'] + ':' +
+                                             str(course_id) + '/assignments')
+            self.assignment_list = assignment_list
+            return assignment_list
+        else:
+            return None
+
+if __name__ == '__main__':
+    canvas = Canvas(
+        '1050~sKxmKbHA0qNQSNqtCPKb87OZEHD6xg7TP574gBnYF6n8nKJ5h6sFQpQMbT4mqKh1',
+        'https://canvas.instructure.com')
+
+    # course_list = canvas.course_list
+    # print(course_list)
+
+    # assignment_list = canvas._get_assignment_list(course_list[2])
+    # print(assignment_list)
+
+    # account_list = canvas.account_list()
+    # print(account_list)
+
+    print(canvas.user_profile)
+    print(canvas.user_id)
