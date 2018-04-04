@@ -169,3 +169,34 @@ Only public functions
 - visualize grade
 - analyze grade
 - compose report
+
+  
+* Files
+
+** server.py
+The backend server.
+
+** demo.py
+In order to use this demo cli to mess around with gradebook, 
+follow instructions below.
+
+1. Create a file =server-config.json= under same directory as the setting.
+
+=server-config.json= follows this format:
+#+BEGIN_SRC json
+{
+    "api_url": "https://canvas.instructure.com",
+    "token": "the token of yours"
+}
+#+END_SRC
+
+2. To get the token, open your Canvas, click Account -- settings,
+scroll to bottom, in "Approved Integrations" section click "New Access Token".
+Enter a purpose and set a expire date of the token.
+
+Then copy that token into your =server-config.json= file.
+
+3. Install our dependency library =canvasapi= to your machine.
+   
+4. run =demo.py=. You can run it either in command line or in IDE.
+
