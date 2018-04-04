@@ -120,11 +120,11 @@ An example form (not all required elements included):
                                        } 
                              } 
                     },
-'Grading_standard': {},
+'grading_standard': { 1(id): { 'A': 94, 'B', 85}},
 }
 
 *** Detailed spec
-- id (str):: id of each object
+- id (str) :: id of each object
 - Each element of quiz/assignment have to have following keys:
   - 'name' (str) :: the name of the quiz/assignment
   - 'grade' (str) :: the grade fetched from canvas
@@ -142,6 +142,17 @@ An example form (not all required elements included):
   - 'name' (str) :: name of the group
   - 'group_weight' (int) :: The percent of the total grade that this assignment group represents
   - 'rules' (dict) :: each key is a rule. TODO list all possible rules.
+                      
+- grading standard:
+  Specifies that how to convert letter grade into numbers
+  It is a dict of lists.
+  Each key is the id of each standard.
+  Each value is a dict of standard specs
+  - key (str) :: id
+  - value (dict) :: the standard
+    In each standard:
+    - key :: the name of letter grade, i.e. 'A', 'A-', etc.
+    - value (int) :: the number to convert to
 
 Notes of canvas API
 https://docs.google.com/document/d/18mY4ZMRscildJ9EnHjZwiuBcDzkvbcuOQummDGHEGOY/edit?usp=sharing

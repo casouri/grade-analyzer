@@ -65,6 +65,21 @@ class CustomCanvas(canvasapi.Canvas):
             }
 
         #
+        # Grading standard
+        #
+
+        # key: grading_standard_id in str
+        # value: {grading standard}
+        grading_standard_form = {}
+        for standard in course.get_grading_standards():
+            # key: name of letter grade in str
+            # value: number of score
+            scheme = {}
+            for grade_spec in standard.grading_scheme:
+                scheme[grade_spec['name']] = grade_spec['value']
+            grading_standard_form[str(standard.id)] = scheme
+
+        #
         # Assignment
         #
 
@@ -110,7 +125,8 @@ class CustomCanvas(canvasapi.Canvas):
         return {
             'quiz': quiz_form,
             'assignment': assignemnt_form,
-            'assignment_group': group_book
+            'assignment_group': group_book,
+            'grading_standard': grading_standard_form
         }
 
 
