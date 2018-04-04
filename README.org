@@ -1,6 +1,6 @@
 #+TITLE: Grade analyzer
 
-Be aware, this project will not be maintained!!!
+This is a final project of CMPSC122 so is not likely to be maintained continuously.
 
 
 - Outline :: [[https://docs.google.com/document/d/1biS9DbUGVLr7K036jbEEMxUdEAtjVgsL0zE6JgopJR8/edit?usp=sharing]]
