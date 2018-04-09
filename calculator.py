@@ -106,7 +106,7 @@ def calculate_final(form):
     - form (dict): gradebook. Detailed spec in ./outline.org.
 
     - Return:
-    - int: the final grade.
+    - int: the final grade in percent.
     """
     assignment_group_book = {}
     for group_id in form['assignment_group']:
