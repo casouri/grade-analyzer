@@ -106,7 +106,8 @@ def calculate_final(form):
     - form (dict): gradebook. Detailed spec in ./outline.org.
 
     - Return:
-    - int: the final grade in percent.
+    - tuple: (final_grade, final_possible_grade).
+      final_grade/final_possible_grade is the percent grade.
     """
     assignment_group_book = {}
     for group_id in form['assignment_group']:
@@ -130,7 +131,7 @@ def calculate_final(form):
         final_grade += grade
         final_possible_grade += max_grade
 
-    return final_grade / final_possible_grade
+    return (final_grade, final_possible_grade)
 
 
 def calculate_surplus_point(form, target_final):
