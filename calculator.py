@@ -18,7 +18,7 @@ class AssignmentGroup:
 
     def calculate_final_grade(self):
         """Calculate the overall grade to final.
-        
+
         - Return
           tuple: (final_grade, final_possible_grade) final_grade
           is the total valid points x group weight. final_possible_grade
@@ -77,7 +77,7 @@ class AssignmentGroup:
 
     def add_assignment(self, assignment):
         """Add an assignment to assignment group.
-        
+
         - Arguments
           - assignment (dict): It should have the same form of an assignment
             in grade book presented in outline.org.
@@ -131,6 +131,19 @@ def calculate_final(form):
         final_possible_grade += max_grade
 
     return final_grade / final_possible_grade
+
+
+def calculate_surplus_point(form, target_final):
+    """Calculate the surplus points given current grade and a target final grade.
+
+    - Argument
+      - form (dict): gradebook. Detailed spec in ./outline.org.
+      - target_final (float): desired final grade in percent.
+
+    - Return
+      int: number of points that can be losted
+      while still maintain target final grade
+    """
 
 
 if __name__ == '__main__':
