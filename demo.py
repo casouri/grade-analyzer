@@ -1,5 +1,6 @@
 import json
 
+import calculator
 from server import CustomCanvas
 
 print('''
@@ -25,10 +26,13 @@ while True:
 
     # show grade book
     grade_book = canvas.custom_get_grade_of_course(course)
-    print(json.dumps(grade_book, sort_keys=True, indent=2))
+    if input('Show gradebook? [y/N] ') == 'y':
+        print(json.dumps(grade_book, sort_keys=True, indent=2))
 
-    keep_going = input('countinue? [y/N]: ')
-    if keep_going == 'y':
+    if input('Show final? [y/N] ') == 'y':
+        print(calculator.calculate_final(grade_book))
+
+    if input('countinue? [y/N]: ') == 'y':
         pass
     else:
         break
