@@ -27,7 +27,7 @@ class CustomCanvas(canvasapi.Canvas):
         return list(map(str, self.course_list))
 
     def __init__(self, *args, **kwargs):
-        """init"""
+        """Init."""
         super().__init__(*args, **kwargs)
         self.user = self.get_user('self')
 
@@ -72,12 +72,27 @@ class CustomCanvas(canvasapi.Canvas):
         # value: {grading standard}
         grading_standard_form = {}
         for standard in course.get_grading_standards():
+            # it should be from F to A
+            sorted_scheme = sorted(standard.grading_scheme,
+                                   lambda spec: spec.get('value'))
+
             # key: name of letter grade in str
             # value: number of score
-            scheme = {}
-            for grade_spec in standard.grading_scheme:
-                scheme[grade_spec['name']] = grade_spec['value']
-            grading_standard_form[str(standard.id)] = scheme
+            # in normal scheme, each key's value is the lowest score of that letter.
+            # in max_score_scheme, each key's value is the hignest score of that letter.
+            # because this is how letter_grade is calculated in calculator.
+            max_score_scheme = {}
+            for index in range(0, len(sorted_scheme)):
+                current_spec = sorted_scheme[index]
+                if index < len(sorted_scheme) - 1:
+                    next_spec = sorted_scheme[index + 1]
+                else:
+                    # when current spec is the last spec, should be A
+                    next_spec = {'name': '', 'value': 100}
+
+                max_score_scheme[current_spec['name']] = next_spec['value']
+
+            grading_standard_form[str(standard.id)] = max_score_scheme
 
         #
         # Assignment

@@ -1,10 +1,12 @@
 import log
 
+logger = log.setupLog(__name__, 'info')
+
 
 class AssignmentGroup:
     """A group of assignment that have the same grade weight."""
 
-    def __init__(self, name, weight, rule_list):
+    def __init__(self, name, weight, rule_list, grading_standard):
         """Init."""
         self.name = name
         self.weight = weight
@@ -15,6 +17,7 @@ class AssignmentGroup:
         self.drop_highest = rule_list.get('drop_highest')
         # a list contains ids of assignments that should never drop
         self.never_drop = rule_list.get('never_drop')
+        self.grading_standard = grading_stadard
 
     def calculate_final_grade(self):
         """Calculate the overall grade to final.
@@ -65,10 +68,29 @@ class AssignmentGroup:
                 if grading_type == 'points':
                     total_grade += assignment['display_grade']
                     total_possible_grade += assignment['points_possible']
-                elif grading_type == 'percent':
+                elif grading_type in ['percent', 'percentage']:
                     total_grade += assignment['display_grade'] * assignment[
                         'points_possible']
                     total_possible_grade += assignment['points_possible']
+                elif grading_type == 'pass_fail':
+                    if assignment['display_grade'] in ['pass', 'complete']:
+                        total_grade += assignment['points_possible']
+                        total_possible_grade += assignment['points_possible']
+                    elif assignment['display_grade'] in ['fail', 'incomplete']:
+                        total_possible_grade += assignment['points_possible']
+                    else:
+                        logger.error(
+                            'wrong grade type/value type: {} value: {}'.format(
+                                grading_type, assignment['display_grade']))
+                elif grading_type == 'letter_grade':
+                    if not self.grading_standard:
+                        logger.error(
+                            'letter grade given but not grading_standard')
+                    else:
+                        total_grade += self.grading_standard[assignment[
+                            'display_grade']] * assignment[
+                                'points_possible'] / 100
+                        total_possible_grade += assignment['points_possible']
 
         final_grade = total_grade * self.weight / 100
         final_possible_grade = total_possible_grade * self.weight / 100
@@ -109,11 +131,20 @@ def calculate_final(form):
       final_grade and final_possible_grade are float.
       final_grade/final_possible_grade is the percent grade.
     """
+    # create assignment groups
     assignment_group_book = {}
     for group_id in form['assignment_group']:
         group = form['assignment_group'][group_id]
+
+        if group.get('grading_standard_id'):
+            grading_standard = form['grading_standard'][str(
+                group['grading_standard_id'])]
+        else:
+            grading_standard = None
+
         assignment_group_book[group_id] = AssignmentGroup(
-            group['name'], group['group_weight'], group['rules'])
+            group['name'], group['group_weight'], group['rules'],
+            grading_standard)
 
     # separate assginments into groups
     for assignment_key in form['assignment']:
