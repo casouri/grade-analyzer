@@ -17,7 +17,7 @@ class AssignmentGroup:
         self.drop_highest = rule_list.get('drop_highest')
         # a list contains ids of assignments that should never drop
         self.never_drop = rule_list.get('never_drop')
-        self.grading_standard = grading_stadard
+        self.grading_standard = grading_standard
 
     def calculate_final_grade(self):
         """Calculate the overall grade to final.
