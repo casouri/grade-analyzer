@@ -88,6 +88,7 @@ Beside quiz and assignment, a form also need grading_standard and assignment_gro
 
 
 An example form (not all required elements included):
+#+BEGIN_SRC json
 {
   'quiz': {
             1(id): {'name': 'quiz 1', 'grade': 'A', 'display grade': 'A'}, 
@@ -122,6 +123,7 @@ An example form (not all required elements included):
                     },
 'grading_standard': { 1(id): { 'A': 94, 'B', 85}},
 }
+#+END_SRC
 
 *** Detailed spec
 - id (str) :: id of each object
