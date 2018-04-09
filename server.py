@@ -112,33 +112,7 @@ class CustomCanvas(canvasapi.Canvas):
                 'points_possible': assignment.points_possible,
                 'assignment_group_id': assignment.assignment_group_id
             }
-
-        #
-        # Quiz
-        #
-
-        # TODO test needed
-        # key: quiz id in str
-        # value: {other attribute}
-        quiz_form = {}
-        try:
-            for quiz in course.get_quizzes():
-                quiz_form[str(assignment.id)] = {
-                    'name': quiz.name,
-                    'grade': quiz.get_submission(self.user).score,
-                    'display_grade': quiz.get_submission(self.user).score,
-                    'grading_type': quiz.grading_type,
-                    'grading_standard_id': quiz.grading_standard_id,
-                    'omit_from_final_grade': quiz.omit_from_final_grade,
-                    'points_possible': quiz.points_possible,
-                }
-        except canvasapi.exceptions.ResourceDoesNotExist:
-            pass
-
-        # print(assignemnt_form)
-        # print(quiz_form)
         return {
-            'quiz': quiz_form,
             'assignment': assignemnt_form,
             'assignment_group': group_book,
             'grading_standard': grading_standard_form
