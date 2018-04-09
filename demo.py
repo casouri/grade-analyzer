@@ -33,7 +33,7 @@ while True:
         grade, max_grade = calculator.calculate_final(grade_book)
         print(grade / max_grade)
 
-    if input('countinue? [y/N]: ') == 'y':
+    if input('continue? [y/N]: ') == 'y':
         pass
     else:
         break
