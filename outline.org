@@ -133,6 +133,7 @@ An example form (not all required elements included):
   - 'grading_standard_id' (int) :: The id of the grading standard being applied to this assignment. Valid if grading_type is 'letter_grade' or 'gpa_scale'.
   - 'omit_from_final_grade' (bool) :: If true, the assignment will be omitted from the student's final grade.
   - 'points_possible' (int) :: the maximum points possible for the assignment
+  - to handle different grading types, consult https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update
 
 - Beside keys above, assignment requires these values:
   - 'assignment_group_id' (int) :: assignment group fetched from canvas
