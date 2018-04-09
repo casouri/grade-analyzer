@@ -24,7 +24,6 @@ class AssignmentGroup:
           is the total valid points x group weight. final_possible_grade
           is the max grade x group weight.
         """
-
         non_nil_assignment_list = []
         for assignment in self.assignment_list:
             if assignment['display_grade']:
@@ -107,6 +106,7 @@ def calculate_final(form):
 
     - Return:
     - tuple: (final_grade, final_possible_grade).
+      final_grade and final_possible_grade are float.
       final_grade/final_possible_grade is the percent grade.
     """
     assignment_group_book = {}
@@ -142,7 +142,7 @@ def calculate_surplus_point(form, target_final):
       - target_final (float): desired final grade in percent.
 
     - Return
-      int: number of points that can be losted
+      float: number of points that can be losted
       while still maintain target final grade
     """
 
