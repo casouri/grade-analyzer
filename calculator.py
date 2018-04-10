@@ -63,7 +63,6 @@ class AssignmentGroup:
                 continue
             else:
                 # handle different grading types
-                # TODO handle other types
                 grading_type = assignment['grading_type']
                 if grading_type == 'points':
                     total_grade += assignment['display_grade']
