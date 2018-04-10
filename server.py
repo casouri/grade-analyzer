@@ -153,8 +153,14 @@ def run_server(address, port):
 
 if __name__ == '__main__':
     # run_server('127.0.0.1', 8888)
+    import yappi
+    yappi.start(builtins=True)
+
     canvas = CustomCanvas(config['api_url'], config['token'])
     course_list = canvas.course_list
-    print(canvas.custom_get_course_string_list()[3])
+    print(canvas.custom_get_course_string_list()[13])
     grade_book = canvas.custom_get_grade_of_course(course_list[3])
-    print(json.dumps(grade_book))
+    # print(json.dumps(grade_book))
+
+    stats = yappi.get_func_stats()
+    stats.save('canvasapi.callgrind.prof', type='callgrind')
