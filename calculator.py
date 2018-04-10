@@ -9,7 +9,10 @@ class AssignmentGroup:
     def __init__(self, name, weight, rule_list, grading_standard):
         """Init."""
         self.name = name
-        self.weight = weight
+        # TODO make sure this is how it works,
+        # it seems that when weight is 0 the whole course
+        # is not weighted.
+        self.weight = weight if weight != 0 else 100
         self.assignment_list = []
         # a number to drop
         self.drop_lowest = rule_list.get('drop_lowest')
