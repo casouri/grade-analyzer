@@ -31,7 +31,9 @@ while True:
 
     if input('Show final? [y/N] ') == 'y':
         grade, max_grade = calculator.calculate_final(grade_book)
-        print(grade / max_grade)
+        print('total points: {}\n max point: {}'.format(grade, max_grade))
+        if max_grade != 0:
+            print(grade / max_grade)
 
     if input('continue? [y/N]: ') == 'y':
         pass
