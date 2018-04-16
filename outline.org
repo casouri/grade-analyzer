@@ -92,9 +92,9 @@ An example form (not all required elements included):
 {
   "quiz": {
             "1(id)": {"name": "quiz 1", "grade": "A", "display grade": "A"}, 
-            "2(id)": {"name": "quiz 1", "grade": "18", "display grade": Null}, 
-            "3(id)": {"name": "quiz 1", "grade": "10", "display grade": Null}, 
-            "4(id)": {"name": "quiz 1", "grade": "15", "display grade": Null}
+            "2(id)": {"name": "quiz 1", "grade": "18", "display grade": null}, 
+            "3(id)": {"name": "quiz 1", "grade": "10", "display grade": null}, 
+            "4(id)": {"name": "quiz 1", "grade": "15", "display grade": null}
           },
   "assignment": {
                   "1(id)": { "name": "hw 1", 
