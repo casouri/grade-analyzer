@@ -175,9 +175,13 @@ def calculate_surplus_point(form, target_final):
       - target_final (float): desired final grade in percent.
 
     - Return
-      float: number of points that can be lost
+      tuple of two float: number of points that can be lost
       while still maintain target final grade
+                          and max possible points.
     """
+    final_grade, final_max_grade = calculate_final(form)
+    surplus_point = (final_grade - target_final) / 100 * final_max_grade
+    return (surplus_point, final_grade)
 
 
 if __name__ == '__main__':
