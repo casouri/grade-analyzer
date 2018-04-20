@@ -80,7 +80,25 @@ def some_function(arg1, arg2):
 """
 #+END_SRC
 
-** Data structure
+** Distribution of work
+   
+
+*** Yuan 
+- server
+- fetch data from Canvas
+- analyze grade
+*** Primo
+- frontend
+- analyze grade
+*** Emily
+- fetch data from Canvas
+- analyze grade
+*** Lily
+- visualize grade
+- analyze grade
+- compose report
+
+* Data structure
 *** structure of form (gradebook)
 Gradebooks of a student are stored and transferred in this structure.
 It is represented by a dict object made of two key-value pairs: quiz and assignment, each of them is a list object, each elements is a row in the form(quizzes in quiz and assignments in assignment). Each element is a dict object that keys are row headers(name, grade, assignment group, etc).
@@ -154,31 +172,6 @@ An example form (not all required elements included):
 Notes of canvas API
 https://docs.google.com/document/d/18mY4ZMRscildJ9EnHjZwiuBcDzkvbcuOQummDGHEGOY/edit?usp=sharing
 
-** Spec for each component
-Only public functions
-*** canvas.py
-- get_token() :: get token from canvas api and return it.
-- fetch_grade() :: fetch grade information from 
-
-** Distribution of work
-   
-
-*** Yuan 
-- server
-- fetch data from Canvas
-- analyze grade
-*** Primo
-- frontend
-- analyze grade
-*** Emily
-- fetch data from Canvas
-- analyze grade
-*** Lily
-- visualize grade
-- analyze grade
-- compose report
-
-  
 * Files
 
 ** server.py
@@ -210,3 +203,36 @@ Then copy that token into your =server-config.json= file.
 
 
 hahaha zeyuan is using git!
+* server request spec
+** get course list
+#+BEGIN_SRC json
+{
+"type": "get_course_list",
+"token": "token"
+}
+#+END_SRC
+
+** get grade by course
+#+BEGIN_SRC json
+{
+"type": "get_grade_by_course",
+"token": "token",
+"course_index": a number
+}
+#+END_SRC
+** calculate surplus point
+#+BEGIN_SRC json
+{
+"type": "calculate_surplus_point",
+"form": gradebook form
+}
+#+END_SRC
+
+** calculate final grade
+#+BEGIN_SRC json
+{
+"type": "calculate_final_grade",
+"form": gradebook form
+}
+#+END_SRC
+
