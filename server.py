@@ -140,8 +140,10 @@ class GARequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Send index.html to client."""
         self._send_header()
-
-        with open(index_html_path, 'r') as file1:
+        file_path = '.' + self.path
+        if file_path == './':
+            file_path = './index.html'
+        with open(file_path, 'r') as file1:
             text = file1.read()
             # self.wfile.write(bytes(message, 'utf8'))
             self.wfile.write(bytes(text, 'utf8'))
