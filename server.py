@@ -1,8 +1,11 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+import calculator
 import canvasapi
 import log
+
+CANVAS_URL = 'https://canvas.instructure.com'
 
 # for development
 logger = log.setupLog(__name__, 'info')
@@ -122,16 +125,17 @@ class CustomCanvas(canvasapi.Canvas):
 class GARequestHandler(BaseHTTPRequestHandler):
     """A request handler for grade-analyzer server."""
 
-    def __init__(self):
-        """init."""
-        super.__init__()
-        self.canvas = CustomCanvas(config['api_url'], config['token'])
-
     def _send_header(self):
         """Send header to client."""
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
+
+    def _send_json_header(self):
+        """Send header to client for json data."""
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.send_headers()
 
     def do_GET(self):
         """Send index.html to client."""
@@ -141,6 +145,67 @@ class GARequestHandler(BaseHTTPRequestHandler):
             text = file1.read()
             # self.wfile.write(bytes(message, 'utf8'))
             self.wfile.write(bytes(text, 'utf8'))
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+
+        # post data
+        post_data = self.rfile.read(content_length)
+        logger.debug('post_data: %s', post_data)
+        try:
+            request_form = json.loads(post_data)
+            logger.debug('request_form: %s', request_form)
+        except json.decoder.JSONDecodeError:
+            logger.warning('Error when paring post data.')
+            self.send_response(400)
+            return
+
+        # decide what to do
+        try:
+            request_type = request_form['request_type']
+            # type: calculate_final_grade
+            # form: form
+            # return: {'final_grade', 'max_final_grade'}
+            if request_type == 'calculate_final_grade':
+                final_grade, max_final_grade = calculator.calculate_final(
+                    request_form['form'])
+                return_data = {
+                    'final_grade': final_grade,
+                    'max_final_grade': max_final_grade
+                }
+
+            # type: calculate_surplus_point
+            # form: form
+            # return: {'surplus_point', 'max_point'}
+            elif request_type == 'calculate_surplus_point':
+                surplus_point, max_point = calculator.calculate_surplus_point(
+                    request_form['form'])
+                return_data = {
+                    'surplus_point': surplus_point,
+                    'max_point': max_point
+                }
+
+            # type: calculate_final_grade
+            # form: form
+            elif request_type == 'get_course_list':
+                canvas = CustomCanvas(CANVAS_URL, request_form['token'])
+                return_data = canvas.custom_get_course_string_list()
+
+            # type: get_grade_by_course
+            # form: token, course_index
+            elif request_type == 'get_grade_by_course':
+                canvas = CustomCanvas(CANVAS_URL, request_form['token'])
+                course_index = request_form['course_index']
+                return_data = canvas.custom_get_grade_of_course(course_index)
+
+        except KeyError as e:
+            logger.warning('Wrong form from client: %s', e)
+            self.send_response(400)
+            return
+
+        # send data back to client
+        self._send_json_header()
+        self.wfile.write(bytes(json.dumps(return_data), 'utf-8'))
 
 
 def run_server(address, port):
@@ -152,15 +217,16 @@ def run_server(address, port):
 
 
 if __name__ == '__main__':
-    # run_server('127.0.0.1', 8888)
-    import yappi
-    yappi.start(builtins=True)
+    run_server('127.0.0.1', 8888)
 
-    canvas = CustomCanvas(config['api_url'], config['token'])
-    course_list = canvas.course_list
-    print(canvas.custom_get_course_string_list()[13])
-    grade_book = canvas.custom_get_grade_of_course(course_list[3])
-    # print(json.dumps(grade_book))
+    # import yappi
+    # yappi.start(builtins=True)
 
-    stats = yappi.get_func_stats()
-    stats.save('canvasapi.callgrind.prof', type='callgrind')
+    # canvas = CustomCanvas(config['api_url'], config['token'])
+    # course_list = canvas.course_list
+
+    # grade_book = canvas.custom_get_grade_of_course(course_list[3])
+    # # print(json.dumps(grade_book))
+
+    # stats = yappi.get_func_stats()
+    # stats.save('canvasapi.callgrind.prof', type='callgrind')
