@@ -135,7 +135,7 @@ class GARequestHandler(BaseHTTPRequestHandler):
         """Send header to client for json data."""
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
-        self.send_headers()
+        self.end_headers()
 
     def do_GET(self):
         """Send index.html to client."""
@@ -185,8 +185,8 @@ class GARequestHandler(BaseHTTPRequestHandler):
                     'max_point': max_point
                 }
 
-            # type: calculate_final_grade
-            # form: form
+            # type: get_course_list
+            # form: token
             elif request_type == 'get_course_list':
                 canvas = CustomCanvas(CANVAS_URL, request_form['token'])
                 return_data = canvas.custom_get_course_string_list()
