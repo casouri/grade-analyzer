@@ -136,6 +136,7 @@
             <option value="course5">course5</option>
             <option value="course6">course6</option>
         </select>
+        <input type="button" value="select" name="selectCourse">
     </div>
 </form>
 
@@ -208,7 +209,7 @@
     <form>
         Final Grade:
         <input type="text" name="finalgrade" size="5px" maxlength="100" />
-        %
+        %<input type="button" name="SubmitFinalGrade" value="submit" />
     </form>
 </div>
 
@@ -222,18 +223,25 @@ Points Lost:
 
 <div id="id09">
     Homework
-    <form><input type="text" name="hw pts off" size="3px" maxlength="3px" /> * 20% = m (a%)</form>
+    <form>
+        <input type="text" name="hw pts off" size="3px" maxlength="3px" /> * 20% = m (a%)
+        <input type="button" name="submitHomeworkGrade" value="submit" />
+    </form>
 </div>
 
 <div id="id10">
     Test
-    <form><input type="text" name="test pts off" size="3px" maxlength="3px" /> * 80% = n (b%)</form>
+    <form>
+        <input type="text" name="test pts off" size="3px" maxlength="3px" /> * 80% = n (b%)
+        <input type="button" name="submitTestGrade" value="submit" />
+    </form>
 </div>
 
 <div id="id11">
     <form>
         If I get
         <input type="text" name="assumed grade" size="4px" maxlength="4px" />
+        <input type="button" name="submitGradeOff" value="submit" />
     </form>
 
     <form>
