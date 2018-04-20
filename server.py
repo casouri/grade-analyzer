@@ -12,8 +12,8 @@ logger = log.setupLog(__name__, 'info')
 
 index_html_path = './index.html'
 
-with open('server-config.json') as file1:
-    config = json.load(file1)
+# with open('server-config.json') as file1:
+#     config = json.load(file1)
 
 
 class CustomCanvas(canvasapi.Canvas):
