@@ -2,7 +2,7 @@
 function login(){
     var token = document.getElementsByName("username")[0].value;
     window.location.href = "http://127.0.0.1:8888/Course-Page.html";
-    localStorage.setItem("token", token)
+    localStorage.setItem("token", token);
 }
 
 function getCourses(){
@@ -22,6 +22,6 @@ function getCourses(){
             select.add(option);
             }
         }
-    }
+    };
 
 }
