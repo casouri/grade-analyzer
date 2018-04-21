@@ -143,10 +143,60 @@ class GARequestHandler(BaseHTTPRequestHandler):
         file_path = '.' + self.path
         if file_path == './':
             file_path = './index.html'
-        with open(file_path, 'r') as file1:
+        with open(file_path, 'rb') as file1:
             text = file1.read()
             # self.wfile.write(bytes(message, 'utf8'))
-            self.wfile.write(bytes(text, 'utf8'))
+            self.wfile.write(text)
+
+    def _handle_post_request(self, request_form):
+        """Hanles post request.
+        
+        - Arguments
+          - request_form (dic): post data.
+        
+        - Return
+          - list or dict: the data to be returned to client.
+        
+        - Exceptions
+          - KeyError if the request_type is not found.
+        """
+        request_type = request_form['request_type']
+        # type: calculate_final_grade
+        # form: form
+        # return: {'final_grade', 'max_final_grade'}
+        if request_type == 'calculate_final_grade':
+            final_grade, max_final_grade = calculator.calculate_final(
+                request_form['form'])
+            return_data = {
+                'final_grade': final_grade,
+                'max_final_grade': max_final_grade
+            }
+
+        # type: calculate_surplus_point
+        # form: form
+        # return: {'surplus_point', 'max_point'}
+        elif request_type == 'calculate_surplus_point':
+            surplus_point, max_point = calculator.calculate_surplus_point(
+                request_form['form'])
+            return_data = {
+                'surplus_point': surplus_point,
+                'max_point': max_point
+            }
+
+        # type: get_course_list
+        # form: token
+        elif request_type == 'get_course_list':
+            canvas = CustomCanvas(CANVAS_URL, request_form['token'])
+            return_data = canvas.custom_get_course_string_list()
+
+        # type: get_grade_by_course
+        # form: token, course_index
+        elif request_type == 'get_grade_by_course':
+            canvas = CustomCanvas(CANVAS_URL, request_form['token'])
+            course_index = request_form['course_index']
+            return_data = canvas.custom_get_grade_of_course(course_index)
+
+        return return_data
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
@@ -164,42 +214,7 @@ class GARequestHandler(BaseHTTPRequestHandler):
 
         # decide what to do
         try:
-            request_type = request_form['request_type']
-            # type: calculate_final_grade
-            # form: form
-            # return: {'final_grade', 'max_final_grade'}
-            if request_type == 'calculate_final_grade':
-                final_grade, max_final_grade = calculator.calculate_final(
-                    request_form['form'])
-                return_data = {
-                    'final_grade': final_grade,
-                    'max_final_grade': max_final_grade
-                }
-
-            # type: calculate_surplus_point
-            # form: form
-            # return: {'surplus_point', 'max_point'}
-            elif request_type == 'calculate_surplus_point':
-                surplus_point, max_point = calculator.calculate_surplus_point(
-                    request_form['form'])
-                return_data = {
-                    'surplus_point': surplus_point,
-                    'max_point': max_point
-                }
-
-            # type: get_course_list
-            # form: token
-            elif request_type == 'get_course_list':
-                canvas = CustomCanvas(CANVAS_URL, request_form['token'])
-                return_data = canvas.custom_get_course_string_list()
-
-            # type: get_grade_by_course
-            # form: token, course_index
-            elif request_type == 'get_grade_by_course':
-                canvas = CustomCanvas(CANVAS_URL, request_form['token'])
-                course_index = request_form['course_index']
-                return_data = canvas.custom_get_grade_of_course(course_index)
-
+            return_data = self._handle_post_request(request_form)
         except KeyError as e:
             logger.warning('Wrong form from client: %s', e)
             self.send_response(400)
