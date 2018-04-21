@@ -1,1 +1,30 @@
 1050~bGLrm3stktmjbQVChZgMhvhpUeFDThLpMXEXtpwjYIEpphbA5nV2nNdD3S0eLHzu
+
+
+function getCourses(){
+    xmlHttp.open("POST", "http://127.0.0.1:8888");
+    xmlHttp.send('{"request_type": "get_course_list", "token": ${token}');
+    var courseList = JSON.parse(xmlHttp.responseText);
+    var select = document.getElementsById("courses");
+    for(i=0; i<courseList.length; i += 1){
+        var option = document.createElement('option');
+        option.text = courseList[i];
+        select.add(option);
+    }
+}
+
+
+
+
+
+
+            <script type="text/javascript">makeSelections();</script>
+
+function makeSelections(){
+    xmlHttp.open("POST", "http://127.0.0.1:8888");
+    xmlHttp.send('{"request_type": "get_course_list", "token": ${localStorage.getItem("token")}');
+    var courseList = JSON.parse(xmlHttp.responseText);
+    for(i=0; i<courseList.length; i += 1){
+        document.write('<option>'+courseList[i]+'</option>')
+    }
+}
