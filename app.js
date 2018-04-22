@@ -17,7 +17,7 @@ function getCourses () {
       var courseArray = JSON.parse(xmlHttp.responseText)
       window.console.log(courseArray)
       var select = document.getElementById(courseSelectID)
-      for (var i = 0; i < courseArray.length; i += 1) {
+      for (var i = 0; i < courseArray.length; i++ ) {
         var option = document.createElement('option')
         option.text = courseArray[i]
         select.add(option)
@@ -32,7 +32,8 @@ function getGrade () {
   var xmlHttp = new window.XMLHttpRequest()
   xmlHttp.open('POST', 'http://127.0.0.1:8888')
   var token = window.localStorage.getItem('token')
-  var courseIndex = document.getElementById(courseSelectID).selectedIndex
+  // - 1 because ther is a "Select a course" selection
+  var courseIndex = document.getElementById(courseSelectID).selectedIndex - 1
   if (courseIndex < 0) {
     window.console.log('Error: no course selected')
     return
@@ -43,6 +44,31 @@ function getGrade () {
       window.console.log(xmlHttp.responseText)
       var gradeBook = JSON.parse(xmlHttp.responseText)
       window.console.log(gradeBook)
+      window.localStorage.setItem('gradeBook', xmlHttp.responseText)
+      showGrade()
     }
+  }
+}
+
+function getGradeBook () {
+  return JSON.parse(window.localStorage.getItem('gradeBook'))
+}
+
+function showGrade () {
+  var gradeBook = getGradeBook()
+  var table = document.getElementById('assignment-table')
+  var assignmentDict = gradeBook.assignment
+  var assignmentGroupDict = gradeBook.assignment_group
+  var assignmentKeyList = Object.keys(assignmentDict)
+  for (var i = 0; i < assignmentKeyList.length; i++) {
+    var assignment = assignmentDict[assignmentKeyList[i]]
+    var groupName = assignmentGroupDict[assignment.assignment_group_id].name
+    var row = table.insertRow(-1)
+    var nameCell = row.insertCell(0)
+    var gradeCell = row.insertCell(1)
+    var groupCell = row.insertCell(2)
+    nameCell.innerHTML = assignment.name
+    gradeCell.innerHTML = assignment.display_grade
+    groupCell.innerHTML = groupName
   }
 }
