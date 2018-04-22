@@ -150,7 +150,7 @@ An example form (not all required elements included):
   - to handle different grading types, consult https://canvas.instructure.com/doc/api/submissions.html#method.submissions_api.update
 
 - Beside keys above, assignment requires these values:
-  - 'assignment_group_id' (int) :: assignment group fetched from canvas
+  - 'assignment_group_id' (str) :: assignment group fetched from canvas
 
 - assignment group:
   Each assignment group is a dict made of these keys:

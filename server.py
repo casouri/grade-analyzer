@@ -135,7 +135,7 @@ class CustomCanvas(canvasapi.Canvas):
                 'grading_standard_id': assignment.grading_standard_id,
                 'omit_from_final_grade': assignment.omit_from_final_grade,
                 'points_possible': assignment.points_possible,
-                'assignment_group_id': assignment.assignment_group_id
+                'assignment_group_id': str(assignment.assignment_group_id)
             }
         return {
             'assignment': assignemnt_form,
