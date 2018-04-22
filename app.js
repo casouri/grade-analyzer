@@ -87,8 +87,18 @@ function getFinalGrade() {
   var finalGrade = document.getElementById("finalGrade").value;
   var remaindingPoints;
   remaindingPoints = + '%'; //add the pts could lost before the plus sign
+
   remaindingPts = document.getElementById("id08");
   remaindingPts.innerHTML = remaindingPoints;
+
+  quiz = document.getElementById("quiz");
+  quiz.innerHTML = //here is the max possible pts to lose for quiz
+
+    homework = document.getElementById("homework");
+  homework.innerHTML = //here is the max possible pts to lose for homework
+
+    test = document.getElementById("test");
+  test.innerHTML = //here is the max possible pts to lose for test
 }
 
 
