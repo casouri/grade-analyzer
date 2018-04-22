@@ -1,4 +1,5 @@
 import json
+import re
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import calculator
@@ -21,13 +22,34 @@ class CustomCanvas(canvasapi.Canvas):
 
     course_list_cache = None
 
+    def _turncate_course_name(self, course_name):
+        """Turncate long course name into shorter names.
+        
+        Takes the content before first comma,
+        if there is no comma, take the first eight character.
+
+        - Arguments
+          - course_name (str): long course name.
+        
+        - Return
+          - string: short course name.
+        """
+        # logger.debug('course_name type: %s', type(course_name))
+        match = re.match('.+?(?=,)', course_name)
+        if match:
+            return match.group()
+        else:
+            return course_name[:9]
+
     def custom_get_course_string_list(self):
         """Get a list of names of current active courses.
 
         - Return
         - list<str>
         """
-        return list(map(str, self.course_list))
+        return list(
+            map(lambda course: self._turncate_course_name(str(course)),
+                self.course_list))
 
     def __init__(self, *args, **kwargs):
         """Init."""
