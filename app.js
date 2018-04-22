@@ -60,6 +60,10 @@ function showGrade () {
   var assignmentDict = gradeBook.assignment
   var assignmentGroupDict = gradeBook.assignment_group
   var assignmentKeyList = Object.keys(assignmentDict)
+  // clean table
+  for (var i = table.rows.length - 1; i > 0; i--) {
+    table.deleteRow(i)
+  }
   for (var i = 0; i < assignmentKeyList.length; i++) {
     var assignment = assignmentDict[assignmentKeyList[i]]
     var groupName = assignmentGroupDict[assignment.assignment_group_id].name
