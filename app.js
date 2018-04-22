@@ -1,26 +1,48 @@
-function login(){
-    var token = document.getElementsByName("username")[0].value;
-    window.location.href = "http://127.0.0.1:8888/Course-Page.html";
-    localStorage.setItem("token", token);
+const courseSelectID = 'courses'
+
+function login () {
+  var token = document.getElementsByName('username')[0].value
+  window.location.href = 'http://127.0.0.1:8888/Course-Page.html'
+  window.localStorage.setItem('token', token)
 }
 
-function getCourses(){
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "http://127.0.0.1:8888");
-    var token = localStorage.getItem("token");
-    xmlHttp.send('{"request_type": "get_course_list", "token": "' + token + '"}');
-    xmlHttp.onreadystatechange = function() {
+function getCourses () {
+  var courseTag = document.getElementById('id01')
+  var xmlHttp = new XMLHttpRequest()
+  xmlHttp.open('POST', 'http://127.0.0.1:8888')
+  var token = window.localStorage.getItem('token')
+  xmlHttp.send('{"request_type": "get_course_list", "token": "' + token + '"}')
+  xmlHttp.onreadystatechange = function () {
+    if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+      var courseArray = JSON.parse(xmlHttp.responseText)
+      window.console.log(courseArray)
+      var select = document.getElementById(courseSelectID)
+      for (var i = 0; i < courseArray.length; i += 1) {
+        var option = document.createElement('option')
+        option.text = courseArray[i]
+        select.add(option)
+      }
+      // select the "Select a course" selection
+      select.selectedIndex = 0
+    }
+  }
+}
 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-          var courseArray = JSON.parse(xmlHttp.responseText);
-            console.log(courseArray);
-          var select = document.getElementById("courses");
-            for(i=0; i<courseArray.length; i += 1){
-            var option = document.createElement('option');
-            option.text = courseArray[i];
-            select.add(option);
-            }
-        }
-    };
-
+function getGrade () {
+  var xmlHttp = new window.XMLHttpRequest()
+  xmlHttp.open('POST', 'http://127.0.0.1:8888')
+  var token = window.localStorage.getItem('token')
+  var courseIndex = document.getElementById(courseSelectID).selectedIndex
+  if (courseIndex < 0) {
+    window.console.log('Error: no course selected')
+    return
+  }
+  xmlHttp.send('{"request_type": "get_grade_by_course", "token": "' + token + '", ' + '"course_index": "' + courseIndex + '"}')
+  xmlHttp.onreadystatechange = function () {
+    if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+      window.console.log(xmlHttp.responseText)
+      var gradeBook = JSON.parse(xmlHttp.responseText)
+      window.console.log(gradeBook)
+    }
+  }
 }

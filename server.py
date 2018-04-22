@@ -215,8 +215,10 @@ class GARequestHandler(BaseHTTPRequestHandler):
         # form: token, course_index
         elif request_type == 'get_grade_by_course':
             canvas = CustomCanvas(CANVAS_URL, request_form['token'])
-            course_index = request_form['course_index']
-            return_data = canvas.custom_get_grade_of_course(course_index)
+            course_index = int(request_form['course_index'])
+            # logger.debug('index type: %s', type(course_index))
+            return_data = canvas.custom_get_grade_of_course(
+                canvas.course_list[course_index])
 
         return return_data
 
