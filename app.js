@@ -77,11 +77,18 @@ function showGrade() {
   }
 }
 
-
-function getFinalGrade() {
-  var finalgrade;
-  finalgrade =
-    finalGrade = document.getElementById("finalGrade");
-  finalGrade.value = finalgrade;
+function showFinalGrade() {
+  var xmlHttp = new window.XMLHttpRequest()
+  xmlHttp.open('POST', 'http://127.0.0.1:8888')
 
 }
+
+function getFinalGrade() {
+  var finalGrade = document.getElementById("finalGrade").value;
+  var remaindingPoints;
+  remaindingPoints = + '%'; //add the pts could lost before the plus sign
+  remaindingPts = document.getElementById("id08");
+  remaindingPts.innerHTML = remaindingPoints;
+}
+
+
