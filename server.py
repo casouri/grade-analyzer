@@ -98,8 +98,8 @@ class CustomCanvas(canvasapi.Canvas):
         grading_standard_form = {}
         for standard in course.get_grading_standards():
             # it should be from F to A
-            sorted_scheme = sorted(standard.grading_scheme,
-                                   lambda spec: spec.get('value'))
+            sorted_scheme = sorted(
+                standard.grading_scheme, key=lambda spec: spec.get('value'))
 
             # key: name of letter grade in str
             # value: number of score
