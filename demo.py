@@ -30,10 +30,8 @@ while True:
         print(json.dumps(grade_book, sort_keys=True, indent=2))
 
     if input('Show final? [y/N] ') == 'y':
-        grade, max_grade = calculator.calculate_final(grade_book)
-        print('total points: {}\n max point: {}'.format(grade, max_grade))
-        if max_grade != 0:
-            print(grade / max_grade)
+        grade = calculator.calculate_final(grade_book)
+        print('grade: {}'.format(grade))
 
     if input('continue? [y/N]: ') == 'y':
         pass

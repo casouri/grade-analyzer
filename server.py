@@ -187,12 +187,8 @@ class GARequestHandler(BaseHTTPRequestHandler):
         # form: form
         # return: {'final_grade', 'max_final_grade'}
         if request_type == 'calculate_final_grade':
-            final_grade, max_final_grade = calculator.calculate_final(
-                request_form['form'])
-            return_data = {
-                'final_grade': final_grade,
-                'max_final_grade': max_final_grade
-            }
+            final_grade = calculator.calculate_final(request_form['form'])
+            return_data = {'final_grade': final_grade}
 
         # type: calculate_surplus_point
         # form: form

@@ -26,9 +26,7 @@ class AssignmentGroup:
         """Calculate the overall grade to final.
 
         - Return
-          tuple: (final_grade, final_possible_grade) final_grade
-          is the total valid points x group weight. final_possible_grade
-          is the max grade x group weight.
+          - float: a percent grade
         """
         non_nil_assignment_list = []
         for assignment in self.assignment_list:
@@ -94,9 +92,7 @@ class AssignmentGroup:
                                 'points_possible'] / 100
                         total_possible_grade += assignment['points_possible']
 
-        final_grade = total_grade * self.weight / 100
-        final_possible_grade = total_possible_grade * self.weight / 100
-        return (final_grade, final_possible_grade)
+        return total_grade / total_possible_grade
 
     def add_assignment(self, assignment):
         """Add an assignment to assignment group.
@@ -129,9 +125,7 @@ def calculate_final(form):
     - form (dict): gradebook. Detailed spec in ./outline.org.
 
     - Return:
-    - tuple: (final_grade, final_possible_grade).
-      final_grade and final_possible_grade are float.
-      final_grade/final_possible_grade is the percent grade.
+      - float: a percent grade.
     """
     # create assignment groups
     assignment_group_book = {}
@@ -156,15 +150,13 @@ def calculate_final(form):
         group.add_assignment(assignment)
 
     # calculate final grade
-    final_grade = 0
-    final_possible_grade = 0
+    final_percent_grade = 0
     for group_key in assignment_group_book:
         group = assignment_group_book[group_key]
-        grade, max_grade = group.calculate_final_grade()
-        final_grade += grade
-        final_possible_grade += max_grade
+        percent_grade = group.calculate_final_grade()
+        final_percent_grade += percent_grade
 
-    return (final_grade, final_possible_grade)
+    return final_percent_grade
 
 
 def calculate_surplus_point(form, target_final):
@@ -177,11 +169,11 @@ def calculate_surplus_point(form, target_final):
     - Return
       tuple of two float: number of points that can be lost
       while still maintain target final grade
-                          and max possible points.
+                          and max possible points (100).
     """
-    final_grade, final_max_grade = calculate_final(form)
-    surplus_point = (final_grade - target_final) / 100 * final_max_grade
-    return (surplus_point, final_grade)
+    final_percent_grade = calculate_final(form)
+    surplus_point = (final_percent_grade - target_final) * 100
+    return (surplus_point, 100)
 
 
 if __name__ == '__main__':
