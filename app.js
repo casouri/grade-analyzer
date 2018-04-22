@@ -1,12 +1,12 @@
 const courseSelectID = 'courses'
 
-function login () {
+function login() {
   var token = document.getElementsByName('username')[0].value
   window.location.href = 'http://127.0.0.1:8888/Course-Page.html'
   window.localStorage.setItem('token', token)
 }
 
-function getCourses () {
+function getCourses() {
   var courseTag = document.getElementById('id01')
   var xmlHttp = new XMLHttpRequest()
   xmlHttp.open('POST', 'http://127.0.0.1:8888')
@@ -17,7 +17,7 @@ function getCourses () {
       var courseArray = JSON.parse(xmlHttp.responseText)
       window.console.log(courseArray)
       var select = document.getElementById(courseSelectID)
-      for (var i = 0; i < courseArray.length; i++ ) {
+      for (var i = 0; i < courseArray.length; i++) {
         var option = document.createElement('option')
         option.text = courseArray[i]
         select.add(option)
@@ -28,7 +28,7 @@ function getCourses () {
   }
 }
 
-function getGrade () {
+function getGrade() {
   var xmlHttp = new window.XMLHttpRequest()
   xmlHttp.open('POST', 'http://127.0.0.1:8888')
   var token = window.localStorage.getItem('token')
@@ -50,11 +50,11 @@ function getGrade () {
   }
 }
 
-function getGradeBook () {
+function getGradeBook() {
   return JSON.parse(window.localStorage.getItem('gradeBook'))
 }
 
-function showGrade () {
+function showGrade() {
   var gradeBook = getGradeBook()
   var table = document.getElementById('assignment-table')
   var assignmentDict = gradeBook.assignment
@@ -75,4 +75,13 @@ function showGrade () {
     gradeCell.innerHTML = assignment.display_grade
     groupCell.innerHTML = groupName
   }
+}
+
+
+function getFinalGrade() {
+  var finalgrade;
+  finalgrade =
+    finalGrade = document.getElementById("finalGrade");
+  finalGrade.value = finalgrade;
+
 }
