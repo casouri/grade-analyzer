@@ -138,4 +138,13 @@ function getImage() {
   image.innerHTML = pieChart;
 }
 
+function getFinalReport() {
+  var assumedScore = document.getElementById("assumedGrade").value;
+  var pickGroup = document.getElementById("pickGroup").value;
+  var finalGrade = document.getElementById("finalGrade").value;
+  finalGrade = '';//enter the updated final grade here
+
+
+}
+
 

@@ -193,19 +193,18 @@
     <div id="id11">
         <form>
             If I get
-            <input type="text" name="assumed grade" size="4px" maxlength="4px" />
-            <input type="button" name="submitGradeOff" value="submit" />
+            <input type="text" id="assumedGrade" size="4px" maxlength="4px" />
         </form>
 
         <form>
             on every future
-            <select name="groups">
+            <select id="pickGroup">
                 <option value="quiz">Quizs</option>
                 <option value="homework">Homeworks</option>
                 <option value="test">Tests</option>
             </select>
         </form>
-        <input type="submit" value="Calculate">
+        <input type="submit" value="Calculate" onclick="getFinalReport" />
     </div>
     <div id="id12">
         <div id="image" style="width:300px;height:300px;"></div>
