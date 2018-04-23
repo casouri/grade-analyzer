@@ -93,8 +93,13 @@ class AssignmentGroup:
                                 'points_possible'] / 100
                         total_possible_grade += assignment['points_possible']
 
+        if total_possible_grade <= 0:
+            percent_grade = 0
+        else:
+            percent_grade = total_grade / total_possible_grade
+
         return {
-            'grade': total_grade / total_possible_grade,
+            'grade': percent_grade,
             'max_grade': {
                 'name': self.name,
                 'value': total_possible_grade
