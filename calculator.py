@@ -25,8 +25,9 @@ class AssignmentGroup:
     def calculate_final_grade(self):
         """Calculate the overall grade to final.
 
-        - Return
-          - float: a percent grade
+        - Return:
+        - dict: {'grade': (float) percent grade, 'max_grade':
+                    {'name': group name (str), 'value': group max grade (float)}}
         """
         non_nil_assignment_list = []
         for assignment in self.assignment_list:
@@ -92,7 +93,13 @@ class AssignmentGroup:
                                 'points_possible'] / 100
                         total_possible_grade += assignment['points_possible']
 
-        return total_grade / total_possible_grade
+        return {
+            'grade': total_grade / total_possible_grade,
+            'max_grade': {
+                'name': self.name,
+                'value': total_possible_grade
+            }
+        }
 
     def add_assignment(self, assignment):
         """Add an assignment to assignment group.
@@ -125,7 +132,8 @@ def calculate_final(form):
     - form (dict): gradebook. Detailed spec in ./outline.org.
 
     - Return:
-      - float: a percent grade.
+      - dict: {'grade': (float) percent final grade, 'max_grade':
+                 {'group name': group max grade (float), etc}}
     """
     # create assignment groups
     assignment_group_book = {}
@@ -151,12 +159,16 @@ def calculate_final(form):
 
     # calculate final grade
     final_percent_grade = 0
+    max_grade_dict = {}
     for group_key in assignment_group_book:
         group = assignment_group_book[group_key]
-        percent_grade = group.calculate_final_grade()
+        grade_dict = group.calculate_final_grade()
+        percent_grade = grade_dict['grade']
         final_percent_grade += percent_grade
+        max_grade_dict[grade_dict['max_grade']['name']] = grade_dict[
+            'max_grade']['value']
 
-    return final_percent_grade
+    return {'grade': final_percent_grade, 'max_grade': max_grade_dict}
 
 
 def calculate_surplus_point(form, target_final):
