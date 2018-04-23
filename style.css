@@ -1,0 +1,65 @@
+p, tr, input, option {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+p.headline-1 {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+p.headline-2 {
+    
+    font-size: 28px;
+    font-weight: bold;
+}
+
+p.headline-3 {
+    
+    font-size: 20px;
+    font-weight: bold;
+}
+
+p.body, option {
+    font-size: 14;
+}
+
+p.inline {
+    display: inline-block;
+}
+
+table {
+    border-spacing: 20px 5px;
+}
+
+th {
+    font-size: 28px;
+    text-align: left;
+}
+
+div.section {
+    
+}
+
+div.headline {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+
+div.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+}
+
+div.left {
+    flex: 1;
+}
+
+div.right {
+    flex: 1;
+}
+

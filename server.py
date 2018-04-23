@@ -150,7 +150,7 @@ class GARequestHandler(BaseHTTPRequestHandler):
     def _send_header(self):
         """Send header to client."""
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        # self.send_header('Content-type', 'text/html')
         self.end_headers()
 
     def _send_json_header(self):
