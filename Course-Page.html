@@ -6,106 +6,140 @@
     <style type="text/css">
         #id01 {
             width: 100%;
-            border: 2px solid purple;
-            background-color: purple;
-            color: white;
+            background-color: #F5F5F5;
             position: absolute;
             font-size: 35px;
             font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         #id02 {
             position: absolute;
             top: 150px;
             left: 90px;
-            color: white;
+            border: 2px solid #CCA6B4;
+            background-color: rgb(204, 166, 180);
             font-size: 32px;
             font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         #id03 {
             position: absolute;
             top: 200px;
             left: 90px;
-            color: white;
+            background-color: none;
             font-size: 20px;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         #id04 {
             position: absolute;
             top: 600px;
             left: 90px;
-            color: white;
+            border: 2px solid #CCA6B4;
+            background-color: rgb(204, 166, 180);
             font-size: 32px;
             font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         #id05 {
             position: absolute;
             top: 650px;
             left: 90px;
-            color: white;
+            border: 2px solid #CCA6B4;
+            background-color: rgb(204, 166, 180);
             font-size: 20px;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         #id06 {
             position: absolute;
             top: 150px;
             left: 600px;
-            color: white;
+            background-color: none;
             font-size: 32px;
             font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
+            padding: 5px;
+            width: 490px;
+            height: 75px;
+            text-decoration: underline;
         }
 
         #id07 {
             position: absolute;
             top: 250px;
             left: 600px;
-            color: white;
+            background-color: none;
             font-size: 32px;
             font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
+            width: 490px;
+            padding: 5px;
+            text-decoration: underline;
         }
 
         #id08 {
             position: absolute;
-            top: 250px;
-            left: 800px;
-            color: white;
+            top: 280px;
+            left: 600px;
+            border: 2px solid #CCA6B4;
+            background-color: rgb(204, 166, 180);
             font-size: 32px;
             font-weight: bold;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         #id09 {
             position: absolute;
-            top: 300px;
+            top: 330px;
             left: 600px;
-            color: yellow;
+            background-color: none;
             font-size: 25px;
+            font-family: 'Source Sans Pro', sans-serif;
+            width: 500px;
+            height: 50px;
         }
 
         #id10 {
             position: absolute;
             top: 375px;
             left: 600px;
-            color: purple;
+            background-color: none;
             font-size: 25px;
+            font-family: 'Source Sans Pro', sans-serif;
+            height: 200px;
+            width: 500px;
         }
 
         #id11 {
             position: absolute;
             top: 600px;
             left: 600px;
-            color: white;
+            background-color: none;
             font-size: 32px;
+            font-family: 'Source Sans Pro', sans-serif;
+            width: 500px;
+        }
+
+        #id12 {
+            position: absolute;
+            top: 375px;
+            left: 800px;
         }
 
         body {
-            background-color: gray;
-            color: white;
+            background: linear-gradient(to right, #D3D3D3, #696969);
+            color: black;
+            font-family: 'Source Sans Pro', sans-serif;
         }
 
         table {
             border: none;
+            font-family: 'Source Sans Pro', sans-serif;
+            width: 460px;
         }
 
         th {
@@ -113,12 +147,15 @@
             font-size: 28px;
             border: none;
             text-align: left;
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: none;
         }
 
         td {
             width: 150px;
             border: none;
             height: 35px;
+            font-family: 'Source Sans Pro', sans-serif;
         }
     </style>
     <meta charset="UTF-8">
@@ -127,7 +164,7 @@
 
 <body onload="getCourses();">
     <div id="id01">
-        Course
+        Courses
         <select name="courses" id="courses" onchange="getGrade()">
             <option value="" disabled selected>Select a course</option>
         </select>
@@ -146,55 +183,63 @@
     <div id="id06">
         <form>
             Final Grade:
-            <input type="text" name="finalgrade" size="5px" maxlength="5px" /> %
-            <input type="button" name="SubmitFinalGrade" value="submit" />
+            <input type="text" name="finalgrade" size="5px" maxlength="5px" id="finalGrade" /> %
+            <input type="button" name="SubmitFinalGrade" value="submit" onclick="getFinalGrade()" />
         </form>
     </div>
 
     <div id="id07">
-        Points Lost:
+        How Many Points Could Lost:
     </div>
 
     <div id="id08">
-        3.65%
+        <div id="remainding"></div>
     </div>
 
     <div id="id09">
-        <br/> Lose More Points on:
+        Lose More Points on:
         <br/>
     </div>
 
     <div id="id10">
-        Homework:
         <form>
-            <input type="text" name="hw pts off" size="3px" maxlength="3px" />
-            <input type="button" name="submitHomeworkGrade" value="submit" />
+            Quiz:
+            <div id="quiz"></div>
+            <input type="text" name="hw pts off" size="3px" maxlength="3px" id="getQuizPoint" />
         </form>
-        Test:
         <form>
-            <input type="text" name="test pts off" size="3px" maxlength="3px" />
-            <input type="button" name="submitTestGrade" value="submit" />
+            Homework:
+            <div id="homework"></div>
+            <input type="text" name="hw pts off" size="3px" maxlength="3px" id="getHomeworkPoint" />
+        </form>
+        <form>
+            Test:
+            <div id="test"></div>
+            <input type="text" name="test pts off" size="3px" maxlength="3px" id="getTestPoint" />
+            <br/>
+            <input type="button" name="submitTestGrade" value="submit" onclick="getImage()" />
         </form>
     </div>
 
     <div id="id11">
         <form>
             If I get
-            <input type="text" name="assumed grade" size="4px" maxlength="4px" />
-            <input type="button" name="submitGradeOff" value="submit" />
+            <input type="text" id="assumedGrade" size="4px" maxlength="4px" />
         </form>
 
         <form>
             on every future
-            <select name="groups">
+            <select id="pickGroup">
                 <option value="quiz">Quizs</option>
                 <option value="homework">Homeworks</option>
                 <option value="test">Tests</option>
             </select>
         </form>
-        <input type="submit" value="Calculate">
+        <input type="submit" value="Calculate" onclick="getFinalReport" />
     </div>
-
+    <div id="id12">
+        <div id="image" style="width:300px;height:300px;"></div>
+    </div>
 </body>
 
 </html>
