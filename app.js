@@ -85,20 +85,57 @@ function showFinalGrade() {
 
 function getFinalGrade() {
   var finalGrade = document.getElementById("finalGrade").value;
-  var remaindingPoints;
-  remaindingPoints = + '%'; //add the pts could lost before the plus sign
 
-  remaindingPts = document.getElementById("id08");
-  remaindingPts.innerHTML = remaindingPoints;
+  var remaindingPts;
+  remaindingPts = + '%'; //add the pts could lost before the plus sign
+  remainding = document.getElementById("remainding");
+  remainding.innerHTML = remaindingPts;
 
+  var quizPts;
+  quizPts = ''; //add the max possible pts to lose for quiz
   quiz = document.getElementById("quiz");
-  quiz.innerHTML = //here is the max possible pts to lose for quiz
+  quiz.innerHTML = quizPts;
 
-    homework = document.getElementById("homework");
-  homework.innerHTML = //here is the max possible pts to lose for homework
+  var homeworkPts;
+  homeworkPts = ''; //add the max possible pts to lose for homework
+  homework = document.getElementById("homework");
+  homework.innerHTML = homeworkPts;
 
-    test = document.getElementById("test");
-  test.innerHTML = //here is the max possible pts to lose for test
+  var testPts;
+  testPts = ''; //add the max possible pts to lose for test
+  test = document.getElementById("test");
+  test.innerHTML = testPts;
+}
+
+function getImage() {
+  var quizPoints = document.getElementById("quiz").value;
+  var homeworkPoints = document.getElementById("homework").value;
+  var testPoints = document.getElementById("test").value;
+
+  var remaindingPts;
+  remaindingPts = + '%'; //add the pts could lost before the plus sign
+  remainding = document.getElementById("remainding");
+  remainding.innerHTML = remaindingPts;
+
+  var quizPts;
+  quizPts = ''; //add the max possible pts to lose for quiz
+  quiz = document.getElementById("quiz");
+  quiz.innerHTML = quizPts;
+
+  var homeworkPts;
+  homeworkPts = ''; //add the max possible pts to lose for homework
+  homework = document.getElementById("homework");
+  homework.innerHTML = homeworkPts;
+
+  var testPts;
+  testPts = ''; //add the max possible pts to lose for test
+  test = document.getElementById("test");
+  test.innerHTML = testPts;
+
+  var pieChart;
+  pieChart = "<img" + "" + " >" //add the image in the quotes
+  image = document.getElementById("image");
+  image.innerHTML = pieChart;
 }
 
 
