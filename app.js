@@ -27,9 +27,12 @@ function updateCourseSelect () {
       select.selectedIndex = 0
     }
   }
+  window.loadingNode = document.getElementById('load')
+  window.loadingNode.innerHTML = 'loaded'
 }
 
 function getGrade () {
+  window.loadingNode.innerHTML = 'loading'
   var xmlHttp = new window.XMLHttpRequest()
   xmlHttp.open('POST', 'http://127.0.0.1:8888')
   var token = window.localStorage.getItem('token')
@@ -84,6 +87,7 @@ function showGrade () {
     gradeCell.innerHTML = assignment.display_grade
     groupCell.innerHTML = groupName
   }
+  window.loadingNode.innerHTML = 'loaded'
 }
 
 function updateFinalGradeAndDisplay () {
