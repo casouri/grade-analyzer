@@ -306,3 +306,18 @@ function getFinalReport () {
 }
 
 
+function basic () {
+  var p = document.getElementsByTagName('P')
+  for (i = 0; i < p.length; i++) {
+    p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+  }
+  var p = document.getElementsByTagName('INPUT')
+  for (i = 0; i < p.length; i++) {
+    p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+  }
+  var p = document.getElementsByTagName('TR')
+  for (i = 0; i < p.length; i++) {
+    p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+  }
+  document.getElementsByTagName('body')[0].style.background = '#FFFFFF'
+}

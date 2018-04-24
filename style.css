@@ -1,5 +1,9 @@
+body {
+    background: linear-gradient(to right, #D3D3D3, #696969);
+}
+
 p, tr, input, option {
-    font-family: 'Source Sans Pro', sans-serif;
+    /* font-family: 'Source Sans Pro', sans-serif; */
 }
 
 #load {
