@@ -190,7 +190,9 @@ class GARequestHandler(BaseHTTPRequestHandler):
             grade_dict = calculator.calculate_final(request_form['form'])
             return_data = {
                 'final_grade': grade_dict['grade'],
-                'max_grade_dict': grade_dict['max_grade']
+                'total_max_percent': grade_dict['total_max_percent'],
+                'max_grade_dict': grade_dict['max_grade'],
+                'group_weight_dict': grade_dict['group_weight']
             }
 
         # type: calculate_surplus_point

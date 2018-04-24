@@ -23,9 +23,6 @@ p.body, option {
     font-size: 14;
 }
 
-p.inline {
-    display: inline-block;
-}
 
 table {
     border-spacing: 20px 5px;
@@ -34,6 +31,23 @@ table {
 th {
     font-size: 28px;
     text-align: left;
+}
+
+input.final {
+    font-size: 28px;
+    type: text;
+    width: 70px;
+}
+
+input.predict {
+    font-size: 28px;
+    type: text;
+    width: 70px;
+}
+input.surplus {
+    font-size: 18;
+    type: text;
+    width: 50px;
 }
 
 div.section {
@@ -63,3 +77,6 @@ div.right {
     flex: 1;
 }
 
+.inline {
+    display: inline-block;
+}

@@ -1,5 +1,6 @@
 var i
 const courseSelectID = 'courses'
+window.courseUpdatedButNotSurplusTable = false
 
 function login () {
   var token = document.getElementsByName('username')[0].value
@@ -7,8 +8,7 @@ function login () {
   window.localStorage.setItem('token', token)
 }
 
-function getCourses () {
-  var courseTag = document.getElementById('id01')
+function updateCourseSelect () {
   var xmlHttp = new XMLHttpRequest()
   xmlHttp.open('POST', 'http://127.0.0.1:8888')
   var token = window.localStorage.getItem('token')
@@ -46,9 +46,20 @@ function getGrade () {
       var gradeBook = JSON.parse(xmlHttp.responseText)
       window.console.log(gradeBook)
       window.localStorage.setItem('gradeBook', xmlHttp.responseText)
-      showGrade()
+
+      window.courseUpdatedButNotSurplusTable = true
+      updateGradeChange()
     }
   }
+}
+
+function updateGradeChange () {
+  showGrade()
+  // groupDict set here.
+  updateFinalGradeAndDisplay()
+  // the updateSurplusPoint is in callback of updateFinalGradeAndDisplay
+  // bacause it needs AJAX to finish
+  updatePredictionSelect()
 }
 
 function getGradeBook () {
@@ -59,6 +70,7 @@ function showGrade () {
   var gradeBook = getGradeBook()
   var table = document.getElementById('grade-book')
   var assignmentDict = gradeBook.assignment
+  // {group id: {name, etc}}
   var assignmentGroupDict = gradeBook.assignment_group
   var assignmentKeyList = Object.keys(assignmentDict)
   // clean table
@@ -76,7 +88,6 @@ function showGrade () {
     gradeCell.innerHTML = assignment.display_grade
     groupCell.innerHTML = groupName
   }
-  updateFinalGradeAndDisplay()
 }
 
 function updateFinalGradeAndDisplay () {
@@ -92,11 +103,19 @@ function updateFinalGradeAndDisplay () {
       var finalGrade = gradeDict.final_grade
       window.console.log(finalGrade)
       var maxGradeDict = gradeDict.max_grade_dict
+      var groupWeightDict = gradeDict.group_weight_dict
       window.console.log(maxGradeDict)
+      window.console.log(groupWeightDict)
       // {'group name': max point of the group, etc}
-      window.localStorage.setItem('groupDict', maxGradeDict)
+      window.localStorage.setItem('groupDict', JSON.stringify(maxGradeDict))
+      window.localStorage.setItem('groupWeightDict', JSON.stringify(groupWeightDict))
       window.localStorage.setItem('realFinalGrade', finalGrade * 100)
-      document.getElementById('finalGrade').value = (finalGrade * 100).toString().slice(0, 5)
+      window.totalMaxGrade = gradeDict.total_max_percent * 100
+      window.console.log(gradeDict.total_max_percent)
+      document.getElementById('final-grade').value = (finalGrade * 100).toString().slice(0, 5)
+      // callback
+      updateSurplusPoint()
+
     }
   }
 }
@@ -106,26 +125,107 @@ function clearChildOf (node) {
   }
 }
 
+function updatePredictionSelect () {
+  var select = document.getElementById('grade-predict-select')
+  clearChildOf(select)
+  var gradeBook = getGradeBook()
+  var assignmentGroupDict = gradeBook.assignment_group
+  var assignmentGroupArray = Object.keys(assignmentGroupDict)
+  for (var i = 0; i < assignmentGroupArray.length; i++) {
+    var option = document.createElement('option')
+    option.text = assignmentGroupDict[assignmentGroupArray[i]].name
+    select.add(option)
+  }
+  select.selectedIndex = -1
+}
+
 function updateSurplusPoint () {
-  var finalGrade = document.getElementById('finalGrade').value
-  var remaindingPts = (window.localStorage.getItem('realFinalGrade') - parseFloat(finalGrade)).toString().slice(0, 4) + ' %' // add the pts could lost before the plus sign
-  document.getElementById('id09').innerHTML = 'Total surplus point: ' + remaindingPts
-  window.console.log(remaindingPts)
+  var table = document.getElementById('surplus-point-table')
+  // {groupname: maxscore}
+  var stringGroupDict = window.localStorage.getItem('groupDict')
+  var groupDict = JSON.parse(stringGroupDict)
+  window.console.log(groupDict)
+  var weightBook = window.localStorage.getItem('groupWeightDict')
+  console.log(weightBook)
+  weightBook = JSON.parse(weightBook)
+  window.console.log(weightBook)
 
-  var divElement = document.getElementById('id10')
-  clearChildOf(divElement)
-  var groupDict = window.localStorage.getItem('groupDict')
+  var pointSpent = 0
+  if (window.courseUpdatedButNotSurplusTable) {
+    constructSurplusPointList(groupDict, table)
+    window.courseUpdatedButNotSurplusTable = false
+  } else {
+    pointSpent = calculatePointAlreadySpent(groupDict, table, weightBook)
+  }
+  window.console.log(pointSpent)
+
+  var finalGrade = document.getElementById('final-grade').value
+  window.console.log('finalGrade: ', finalGrade)
+  var remaindingPts = (parseFloat(window.localStorage.getItem('realFinalGrade')) - parseFloat(finalGrade) - pointSpent)
+  remaindingPts = remaindingPts * window.totalMaxGrade / 100 // add the pts could lost before the plus sign
+  document.getElementById('surplus-point-headline').innerHTML = 'Points You Can Lost: ' + remaindingPts.toString().slice(0, 4) + ' %'
+  window.console.log('remaindingPts', remaindingPts)
+  calculateLeftoverPoint(groupDict, table, weightBook, remaindingPts)
+}
+
+function calculateLeftoverPoint (groupDict, table, weightBook, remaindingPts) {
+  var rowArray = table.rows
+  for (i = 0; i < rowArray.length; i++) {
+    var row = rowArray[i]
+    var name = row.children[0].children[0].innerHTML
+    window.console.log('weight: ', weightBook[name])
+    window.console.log('max: ', groupDict[name])
+    var leftover = remaindingPts / weightBook[name] * groupDict[name] / 80
+    window.console.log('leftover: ', leftover)
+    row.children[2].children[0].innerHTML = 'with another ' + leftover.toString().slice(0, 4) + ' left'
+  }
+}
+
+function calculatePointAlreadySpent (groupDict, table, weightBook) {
+  window.console.log(weightBook)
+  var rowArray = table.rows
+  var totalPercent = 0
+  for (i = 0; i < rowArray.length; i++) {
+    var row = rowArray[i]
+    var point = row.children[1].children[0].value
+    window.console.log('point', point)
+    var name = row.children[0].children[0].innerHTML
+    window.console.log('name', name)
+    var maxPointOfGroup = groupDict[name]
+    window.console.log('maxPointOfGroup', maxPointOfGroup)
+    if (maxPointOfGroup !== 0) {
+      totalPercent += (point / maxPointOfGroup * weightBook[name])
+    }
+  }
+  return (totalPercent * 100)
+}
+
+function constructSurplusPointList (groupDict, table) {
+  clearChildOf(table)
   var keyArray = Object.keys(groupDict)
+  window.console.log(keyArray)
 
-  // for (i = 0; keyArray.length; i++) {
-  //   var form = document.createElement('FORM')
-  //   var name = document.createElement('P')
-  //   var inputNode = document.createElement('INPUT')
-  //   name.value = keyArray[i]
-  //   form.appendChild(name)
-  //   form.appendChild(inputNode)
-  //   divElement.appendChild(form)
-  // }
+  for (i = 0; i < keyArray.length; i++) {
+    var row = document.createElement('tr')
+    var nameTd = document.createElement('td')
+    var inputTd = document.createElement('td')
+    var leftoverTd = document.createElement('td')
+    var name = document.createElement('P')
+    name.innerHTML = keyArray[i]
+    name.className = 'body inline'
+    var input = document.createElement('INPUT')
+    input.className = 'surplus'
+    input.setAttribute('onchange', 'updateSurplusPoint()')
+    var leftover = document.createElement('p')
+    leftover.innerHTML = 'points with another 0 left'
+    nameTd.appendChild(name)
+    inputTd.appendChild(input)
+    leftoverTd.appendChild(leftover)
+    row.appendChild(nameTd)
+    row.appendChild(inputTd)
+    row.appendChild(leftoverTd)
+    table.appendChild(row)
+  }
 }
 
 function getImage () {
@@ -162,7 +262,7 @@ function getImage () {
 function getFinalReport () {
   var assumedScore = document.getElementById('assumedGrade').value
   var pickGroup = document.getElementById('pickGroup').value
-  var finalGrade = document.getElementById('finalGrade').value
+  var finalGrade = document.getElementById('final-grade').value
   finalGrade = ''// enter the updated final grade here
 }
 

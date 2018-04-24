@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200" rel="stylesheet">
 </head>
 
-<body onload="getCourses();">
+<body onload="updateCourseSelect();">
     <div class="headline">
         <p class="headline-1" style="margin-right: 30px;">Course</p>
         <select name="courses" id="courses" onchange="getGrade()">
@@ -32,37 +32,34 @@
         <div class="right">
             <div class="section" id="final">
                 <div>
-                    <p class="headline-2">Final Grade</p>
-                    <form>
-                        <input type="text" name="finalgrade" size="5px" maxlength="5px" id="finalGrade" /> %
-                    </form>
+                    <p class="headline-2 inline">Final Grade</p>
+                    <input class="final inline" id="final-grade" onchange="updateSurplusPoint()" />
+                    <p class="headline-2 inline">%</p>
                 </div>
             </div>
 
             <div class="section">
-                <p class="headline-2">How Many Points You Can Lost</p>
-                <p class="headline-3">Total surplus point:</p> 
-                <div>
-                    <form>
-                        <p class="body inline" >Quiz: </p>
-                        <input type="text" name="hw pts off" size="3px" maxlength="3px" id="getQuizPoint"/>
-                    </form>
-                    <form>
-                        <p class="body inline">Homework: </p>
-                        <input type="text" name="hw pts off" size="3px" maxlength="3px" id="getHomeworkPoint"/>
-                    </form>
-                    <form>
-                        <p class="body inline">Test: </p>
-                        <input type="text" name="test pts off" size="3px" maxlength="3px" id="getTestPoint"/>
-                    </form>
-                    <input type="button" name="submitTestGrade" value="calculate" onclick=""/>
-                </div>
+                <p class="headline-2" id="surplus-point-headline">Points You Can Lost</p>
+                <table id="surplus-point-table">
+                    <tr>
+                        <td><p class="body" >Quiz</p></td>
+                        <td><input class="surplus"/></td>
+                    </tr>
+                    <tr>
+                        <td><p class="body">Homework</p></td>
+                        <td><input class="surplus"/></td>
+                    </tr>
+                    <tr>
+                        <td><p class="body">Test</p></td>
+                        <td><input class="surplus"/></td>
+                    </tr>
+                </table>
             </div>
 
             <div id="section">
                 <form>
                     <p class="headline-2 inline">If I get</p>
-                    <input type="text" id="assumedGrade" size="4px" maxlength="4px" />
+                    <input class="predict" id="assumedGrade"/>
                     <p class="headline-2 inline">on every future</p>
                     <select id="grade-predict-select">
                     </select>
