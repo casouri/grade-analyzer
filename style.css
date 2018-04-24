@@ -9,6 +9,7 @@ p, tr, input, option {
 p.headline-1 {
     font-size: 35px;
     font-weight: bold;
+    margin-left: 40px;
 }
 
 p.headline-2 {
@@ -75,10 +76,12 @@ div.container {
 
 div.left {
     flex: 1;
+    border: 20px solid transparent;
 }
 
 div.right {
     flex: 1;
+    border: 20px solid transparent;
 }
 
 .inline {
