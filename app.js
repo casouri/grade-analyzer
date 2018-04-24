@@ -45,7 +45,7 @@ function getGrade () {
       window.console.log(xmlHttp.responseText)
       var gradeBook = JSON.parse(xmlHttp.responseText)
       window.console.log(gradeBook)
-      window.localStorage.setItem('gradeBook', xmlHttp.responseText)
+      window.gradeBook = gradeBook
 
       window.courseUpdatedButNotSurplusTable = true
       updateGradeChange()
@@ -62,12 +62,8 @@ function updateGradeChange () {
   updatePredictionSelect()
 }
 
-function getGradeBook () {
-  return JSON.parse(window.localStorage.getItem('gradeBook'))
-}
-
 function showGrade () {
-  var gradeBook = getGradeBook()
+  var gradeBook = window.gradeBook
   var table = document.getElementById('grade-book')
   var assignmentDict = gradeBook.assignment
   // {group id: {name, etc}}
@@ -93,7 +89,7 @@ function showGrade () {
 function updateFinalGradeAndDisplay () {
   var xmlHttp = new window.XMLHttpRequest()
   xmlHttp.open('POST', 'http://127.0.0.1:8888')
-  var postData = {'request_type': 'calculate_final_grade', 'form': getGradeBook()}
+  var postData = {'request_type': 'calculate_final_grade', 'form': window.gradeBook}
   xmlHttp.send(JSON.stringify(postData))
 
   xmlHttp.onreadystatechange = function () {
@@ -128,7 +124,7 @@ function clearChildOf (node) {
 function updatePredictionSelect () {
   var select = document.getElementById('grade-predict-select')
   clearChildOf(select)
-  var gradeBook = getGradeBook()
+  var gradeBook = window.gradeBook
   var assignmentGroupDict = gradeBook.assignment_group
   var assignmentGroupArray = Object.keys(assignmentGroupDict)
   for (var i = 0; i < assignmentGroupArray.length; i++) {
@@ -177,7 +173,7 @@ function calculateLeftoverPoint (groupDict, table, weightBook, remaindingPts) {
     window.console.log('max: ', groupDict[name])
     var leftover = remaindingPts / weightBook[name] * groupDict[name] / 80
     window.console.log('leftover: ', leftover)
-    row.children[2].children[0].innerHTML = 'with another ' + leftover.toString().slice(0, 4) + ' left'
+    row.children[2].children[0].innerHTML = 'points with another ' + leftover.toString().slice(0, 4) + ' left'
   }
 }
 
@@ -226,6 +222,45 @@ function constructSurplusPointList (groupDict, table) {
     row.appendChild(leftoverTd)
     table.appendChild(row)
   }
+}
+
+function resetFinal () {
+  document.getElementById('final-grade').value = window.localStorage.getItem('realFinalGrade')
+}
+
+function resetGradeBook () {
+  var assignmentDict = window.gradeBook.assignment
+  var assignmentKeyArray = Object.keys(assignmentDict)
+  for (i = 0; i < assignmentKeyArray.length; i++) {
+    assignmentDict[assignmentKeyArray[i]].display_grade = assignmentDict[assignmentKeyArray[i]].grade
+  }
+  window.gradeBook.assignment = assignmentDict
+  showGrade()
+  updateGradeChange()
+}
+
+function predictGrade () {
+  var assumedPercent = parseFloat(document.getElementById('assumedGrade').value) / 100
+  var index = document.getElementById('grade-predict-select').options.selectedIndex
+  var groupName = document.getElementById('grade-predict-select').options[index].innerHTML
+
+  // change gradebook
+  var assignmentDict = window.gradeBook.assignment
+  var assignmentKeyArray = Object.keys(assignmentDict)
+  var groupDict = window.gradeBook.assignment_group
+  for (i = 0; i < assignmentKeyArray.length; i++) {
+    window.console.log('name in book: ', assignmentDict[assignmentKeyArray[i]].name)
+    window.console.log('name to compare: ', groupName)
+    var groupID = assignmentDict[assignmentKeyArray[i]].assignment_group_id
+    var nameInBook = groupDict[groupID].name
+    var assignment = assignmentDict[assignmentKeyArray[i]]
+    if (nameInBook === groupName && assignment.display_grade === null) {
+      assignment.display_grade = Math.round(assumedPercent * assignment.points_possible)
+    }
+  }
+  window.gradeBook.assignment = assignmentDict
+  showGrade()
+  updateGradeChange()
 }
 
 function getImage () {

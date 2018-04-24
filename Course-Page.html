@@ -35,6 +35,7 @@
                     <p class="headline-2 inline">Final Grade</p>
                     <input class="final inline" id="final-grade" onchange="updateSurplusPoint()" />
                     <p class="headline-2 inline">%</p>
+                    <input type="submit" value="reset" onclick="resetFinal()" />
                 </div>
             </div>
 
@@ -60,12 +61,13 @@
                 <form>
                     <p class="headline-2 inline">If I get</p>
                     <input class="predict" id="assumedGrade"/>
-                    <p class="headline-2 inline">on every future</p>
+                    <p class="headline-2 inline">% on every future</p>
                     <select id="grade-predict-select">
                     </select>
                 </form>
                 <p class="headline-3 inline">What would be my final score?</p>
-                <input type="submit" value="calculate" onclick="" />
+                <input type="submit" value="calculate" onclick="predictGrade()" />
+                <input type="submit" value="reset" onclick="resetGradeBook()" />
             </div>
             <div class="section">
                 <div id="image" style="width:300px;height:300px;"></div>
