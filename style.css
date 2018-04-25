@@ -64,6 +64,8 @@ div.section {
 }
 
 div.headline {
+    height: 80px;
+    background: white;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
