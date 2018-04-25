@@ -6,6 +6,10 @@ p, tr, input, option {
     /* font-family: 'Source Sans Pro', sans-serif; */
 }
 
+input.text {
+    background: #dad9da;
+}
+
 #load {
     margin-left: 20px;
 }
