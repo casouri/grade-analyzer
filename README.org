@@ -8,4 +8,14 @@ This is a final project of CMPSC122 so is not likely to be maintained continuous
 *Update:* Now it's moved to [[./outline.org][./outline.org]]. Any change will be updated there.
              
 
+* How to run
+  
+  
+
+- go to your canvas page -- Account -- Setting -- Approved Integrations
+- generate a new token
+- clone
+- run =server.py=
+- go to http://127.0.0.1:8888/ in brower
+- paste your token in and start using
 
