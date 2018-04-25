@@ -10,10 +10,9 @@ p, tr, input, option {
     margin-left: 20px;
 }
 
-p.headline-1 {
-    font-size: 35px;
+div.headline-1 {
+    font-size: 32px;
     font-weight: bold;
-    margin-left: 40px;
 }
 
 p.headline-2 {
@@ -64,8 +63,8 @@ div.section {
 }
 
 div.headline {
-    height: 80px;
-    background: white;
+    height: 45px;
+    background-color: white;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
