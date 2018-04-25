@@ -307,18 +307,38 @@ function getFinalReport () {
 
 
 function basic () {
-  var p = document.getElementsByTagName('P')
-  for (i = 0; i < p.length; i++) {
-    p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+  var button = document.getElementById('basic')
+  if (button.value === 'basic') {
+    var p = document.getElementsByTagName('P')
+    for (i = 0; i < p.length; i++) {
+      p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+    }
+    var p = document.getElementsByTagName('INPUT')
+    for (i = 0; i < p.length; i++) {
+      p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+    }
+    var p = document.getElementsByTagName('TR')
+    for (i = 0; i < p.length; i++) {
+      p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
+    }
+    document.getElementsByTagName('body')[0].style.background = '#dad9da'
+    document.getElementsByTagName('div')[0].style.background = '#dad9da'
+    document.getElementById('basic').value = 'cool'
+  } else if (button.value === 'cool') {
+    var p = document.getElementsByTagName('P')
+    for (i = 0; i < p.length; i++) {
+      p[i].style.fontFamily = null
+    }
+    var p = document.getElementsByTagName('INPUT')
+    for (i = 0; i < p.length; i++) {
+      p[i].style.fontFamily = null
+    }
+    var p = document.getElementsByTagName('TR')
+    for (i = 0; i < p.length; i++) {
+      p[i].style.fontFamily = null
+    }
+    document.getElementsByTagName('body')[0].style.background = 'linear-gradient(to right, #D3D3D3, #696969)'
+    document.getElementsByTagName('div')[0].style.background = 'white'
+    document.getElementById('basic').value = 'basic'
   }
-  var p = document.getElementsByTagName('INPUT')
-  for (i = 0; i < p.length; i++) {
-    p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
-  }
-  var p = document.getElementsByTagName('TR')
-  for (i = 0; i < p.length; i++) {
-    p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
-  }
-  document.getElementsByTagName('body')[0].style.background = '#dad9da'
-  document.getElementsByTagName('div')[0].style.background = '#dad9da'
 }
