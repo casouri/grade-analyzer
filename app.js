@@ -258,7 +258,7 @@ function predictGrade () {
     var groupID = assignmentDict[assignmentKeyArray[i]].assignment_group_id
     var nameInBook = groupDict[groupID].name
     var assignment = assignmentDict[assignmentKeyArray[i]]
-    if (nameInBook === groupName && assignment.display_grade === null) {
+    if (nameInBook === groupName && assignment.grade === null) {
       assignment.display_grade = Math.round(assumedPercent * assignment.points_possible)
     }
   }
