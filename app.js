@@ -325,8 +325,8 @@ function basic () {
     for (i = 0; i < p.length; i++) {
       p[i].style.fontFamily = 'Source Sans Pro, sans-serif'
     }
-    document.getElementsByTagName('body')[0].style.background = '#dad9da'
-    document.getElementsByTagName('div')[0].style.background = '#dad9da'
+    document.getElementsByTagName('body')[0].style.background = 'white'
+    document.getElementsByTagName('div')[0].style.background = 'white'
     document.getElementById('basic').value = 'cool'
   } else if (button.value === 'cool') {
     var p = document.getElementsByTagName('P')
